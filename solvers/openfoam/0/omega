@@ -1,0 +1,32 @@
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    object      omega;
+}
+
+// Placeholder omega ≈ 100 1/s for the k above and a mixing length ~0.07*0.08 m.
+dimensions      [0 0 -1 0 0 0 0];
+
+internalField   uniform 100;
+
+boundaryField
+{
+    inlet
+    {
+        type            fixedValue;
+        value           uniform 100;
+    }
+    outlet
+    {
+        type            inletOutlet;
+        inletValue      uniform 100;
+        value           uniform 100;
+    }
+    walls
+    {
+        type            omegaWallFunction;
+        value           uniform 100;
+    }
+}

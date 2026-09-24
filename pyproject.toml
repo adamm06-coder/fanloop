@@ -1,0 +1,29 @@
+[project]
+name = "fanloop"
+version = "0.1.0"
+description = "Case library, OSC job runner, and results dashboard for a cold ~1 kN electric ducted fan."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "Apache-2.0" }
+authors = [{ name = "FanLoop contributors" }]
+dependencies = [
+    "pydantic>=2.6",
+    "PyYAML>=6.0",
+]
+
+[project.optional-dependencies]
+cadquery = ["cadquery>=2.4"]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+fanloop = "runner.cli:main"
+fanloop-geom = "geom.ducted_fan:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["geom*", "mesh*", "runner*"]
+exclude = ["tests*"]

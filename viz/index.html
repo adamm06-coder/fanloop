@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FanLoop — ducted-fan-1kn</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #1c1915;
+      --muted: #5c564c;
+      --line: #d9d3c7;
+      --paper: #f7f4ee;
+      --banner: #f3e2d2;
+      --banner-ink: #6b2d12;
+    }
+    body {
+      margin: 0;
+      font: 16px/1.45 "Iowan Old Style", "Palatino Linotype", Palatino, serif;
+      color: var(--ink);
+      background: var(--paper);
+    }
+    main {
+      max-width: 42rem;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 3rem;
+    }
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 600;
+      margin: 0 0 0.25rem;
+    }
+    .sub {
+      margin: 0 0 1.25rem;
+      color: var(--muted);
+    }
+    .banner {
+      background: var(--banner);
+      color: var(--banner-ink);
+      padding: 0.75rem 0.9rem;
+      margin: 0 0 1.5rem;
+    }
+    h2 {
+      font-size: 1.05rem;
+      margin: 1.5rem 0 0.5rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      text-align: left;
+      padding: 0.4rem 0.5rem 0.4rem 0;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+    th {
+      font-size: 0.8rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 600;
+    }
+    code, .mono {
+      font-family: "IBM Plex Mono", ui-monospace, monospace;
+      font-size: 0.92em;
+    }
+    .state {
+      font-variant: small-caps;
+      letter-spacing: 0.03em;
+    }
+    .ryg {
+      display: inline-block;
+      min-width: 4.2rem;
+      text-align: center;
+      font-variant: small-caps;
+      letter-spacing: 0.04em;
+      padding: 0.05rem 0.45rem;
+    }
+    .ryg-red { background: #f3d0cb; color: #6b241c; }
+    .ryg-yellow { background: #f6e7b8; color: #6b4e09; }
+    .ryg-green { background: #d5e8cf; color: #1f4d28; }
+    .ryg-unset { background: #e6e2da; color: #5c564c; }
+    .legend {
+      margin: 0 0 0.6rem;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+    footer {
+      margin-top: 2rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>FanLoop</h1>
+    <p class="sub">Cold ducted-fan case <span id="case-name" class="mono">…</span></p>
+    <div class="banner" id="banner">Loading placeholder results…</div>
+    <h2>Quantities</h2>
+    <table>
+      <thead>
+        <tr><th>Name</th><th>Value</th><th>State</th></tr>
+      </thead>
+      <tbody id="quantities"></tbody>
+    </table>
+    <h2>Gates</h2>
+    <p class="legend">
+      Red, yellow, green, or unset. Demo uses A and B_lite (B_lite stays DEMO).
+      Hardware talk uses A, B with a mesh study, C1–C3, and E.
+      The list is <span class="mono">cases/ducted-fan-1kn/GATES.md</span>.
+    </p>
+    <table>
+      <thead>
+        <tr><th>Gate</th><th>RYG</th><th>Note</th></tr>
+      </thead>
+      <tbody id="gates"></tbody>
+    </table>
+    <footer>
+      Reads <span class="mono">viz/data/results.placeholder.json</span> when this page is served,
+      and falls back to <span class="mono">results.placeholder.js</span> if you open the file directly.
+      Gate ids match <span class="mono">cases/ducted-fan-1kn/GATES.md</span>.
+    </footer>
+  </main>
+  <script src="data/results.placeholder.js"></script>
+  <script>
+    function cell(text) {
+      const td = document.createElement("td");
+      td.textContent = text;
+      return td;
+    }
+
+    function render(data) {
+      document.getElementById("case-name").textContent = data.case + " (" + data.status + ")";
+      document.getElementById("banner").textContent = data.disclaimer;
+      const quantities = document.getElementById("quantities");
+      for (const row of data.quantities) {
+        const tr = document.createElement("tr");
+        const shown = row.value === null || row.value === undefined ? "—" : String(row.value);
+        const unit = row.unit ? " " + row.unit : "";
+        tr.append(cell(row.label), cell(shown + unit), cell(row.state));
+        tr.lastChild.className = "state";
+        quantities.append(tr);
+      }
+      const gates = document.getElementById("gates");
+      for (const gate of data.gates) {
+        const tr = document.createElement("tr");
+        const ryg = document.createElement("td");
+        const mark = document.createElement("span");
+        const color = gate.ryg === "red" || gate.ryg === "yellow" || gate.ryg === "green"
+          ? gate.ryg
+          : "unset";
+        mark.className = "ryg ryg-" + color;
+        mark.textContent = color;
+        ryg.append(mark);
+        tr.append(cell(gate.label), ryg, cell(gate.note));
+        gates.append(tr);
+      }
+    }
+
+    async function load() {
+      try {
+        const response = await fetch("data/results.placeholder.json");
+        if (!response.ok) throw new Error("HTTP " + response.status);
+        return await response.json();
+      } catch (err) {
+        if (window.FANLOOP_RESULTS) return window.FANLOOP_RESULTS;
+        throw err;
+      }
+    }
+
+    load().then(render).catch(function (err) {
+      document.getElementById("banner").textContent = "Could not read results: " + err;
+    });
+  </script>
+</body>
+</html>

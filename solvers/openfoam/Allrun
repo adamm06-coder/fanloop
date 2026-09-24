@@ -1,0 +1,14 @@
+#!/bin/sh
+# Serial cold-duct smoke run. Requires an OpenFOAM environment already loaded.
+# On OSC: module load openfoam/2606
+# Then confirm with: module show openfoam/2606
+set -eu
+cd "$(dirname "$0")"
+if ! command -v blockMesh >/dev/null 2>&1 || ! command -v simpleFoam >/dev/null 2>&1; then
+  echo "blockMesh or simpleFoam is not on PATH." >&2
+  echo "Load OpenFOAM first. On OSC: module load openfoam/2606" >&2
+  exit 1
+fi
+blockMesh
+simpleFoam
+echo "Finished simpleFoam on the rectangular duct. This is not a thrust result."

@@ -1,0 +1,42 @@
+schema: fanloop.intent/v0
+name: ducted-fan-1kn
+title: Cold ~1 kN electric ducted fan (single-stage impeller + stator)
+status: research-placeholder
+export_control:
+  intent: EAR99-like cold fan research geometry
+  itar: false
+  hot_section: false
+  part33: false
+mission: uas-experimental-rd
+# Product target. This file does not claim the geometry meets it.
+target_thrust_N: 1000
+thrust_status: target-only-not-a-result
+geometry:
+  diameter_m: 0.30
+  hub_ratio: 0.40
+  blade_count: 8
+  stator_count: 9
+  duct_length_m: 0.25
+  wall_thickness_m: 0.004
+  tip_clearance_m: 0.002
+  blade_chord_m: 0.045
+  blade_thickness_m: 0.003
+  rotor_stagger_deg: 30
+  stator_stagger_deg: 15
+operating_point:
+  rpm: 12000
+  fluid: air
+  thermal: cold
+  note: >
+    Desired cold operating point only. The Week-1 OpenFOAM skeleton does not
+    read RPM and does not rotate.
+solver:
+  primary: openfoam
+  module: openfoam/2606
+  alternate: su2
+  week1_case: solvers/openfoam
+  physics_week1: steady incompressible cold internal duct (simpleFoam)
+notes: >
+  Parametric starting point for a cold single-stage ducted fan. Not a closed
+  design, not a Part 33 article, and not an ITAR description. See the case README
+  before treating any number as performance.

@@ -1,0 +1,17 @@
+schema: fanloop.sbatch/v0
+job_name: fanloop-1kn
+# Project code is never stored in this file.
+# Export OSC_PROJECT from `OSCfinger` before rendering.
+account_env: OSC_PROJECT
+cluster: cardinal
+nodes: 1
+ntasks_per_node: 1
+time: "00:30:00"
+modules:
+  - openfoam/2606
+case_relpath: solvers/openfoam
+solver: simpleFoam
+parallel: false
+notes: >
+  Serial blockMesh + simpleFoam of the cold rectangular-duct skeleton.
+  Not an impeller, not a thrust run. Submit only after docs/OSC_SETUP.md.
