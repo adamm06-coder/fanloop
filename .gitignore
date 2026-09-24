@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local secrets and OSC identity. Project codes belong in the environment.
+.env
+.env.*
+secrets/
+*.pem
+*_rsa
+id_ed25519
+id_rsa
+
+# Rendered batch scripts contain the OSC project code from OSC_PROJECT.
+*.sbatch
+*.slurm
+slurm-*.out
+
+# Generated geometry and mesh notes
+*.stl
+mesh-report.json
+
+.DS_Store

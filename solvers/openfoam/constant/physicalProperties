@@ -1,0 +1,14 @@
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      physicalProperties;
+}
+
+// Duplicate of transportProperties for OpenFOAM.com builds that read this name.
+// If simpleFoam warns that one of the two files is unused, ignore the unused one.
+// Do not treat the warning as a fan result.
+viscosityModel  Newtonian;
+
+nu              1.5e-05;

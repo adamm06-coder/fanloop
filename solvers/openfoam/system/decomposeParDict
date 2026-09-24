@@ -1,0 +1,19 @@
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      decomposeParDict;
+}
+
+// Present so a later parallel run has a starting file.
+// The Week-1 rendered sbatch is serial and does not call decomposePar.
+numberOfSubdomains  4;
+
+method              simple;
+
+simpleCoeffs
+{
+    n               (2 2 1);
+    delta           0.001;
+}
