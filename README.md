@@ -33,7 +33,7 @@ impeller. The runner writes a Slurm script and does not submit it.
 
 | Path | What it is |
 | --- | --- |
-| `cases/ducted-fan-1kn/` | The only case. Intent YAML and a README that says the 1000 N figure is a target. |
+| `cases/ducted-fan-1kn/` | The only case. Intent YAML, the structures gate card, a Gate E materials stub, and a README that says the 1000 N figure is a target. |
 | `geom/` | STL export. Pure Python by default. CadQuery optional. |
 | `mesh/` | ASCII-STL inspection. Not a volume mesher. |
 | `solvers/openfoam/` | `blockMesh` + `simpleFoam` skeleton for a cold duct. |

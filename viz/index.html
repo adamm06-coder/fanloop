@@ -69,6 +69,23 @@
       font-variant: small-caps;
       letter-spacing: 0.03em;
     }
+    .ryg {
+      display: inline-block;
+      min-width: 4.2rem;
+      text-align: center;
+      font-variant: small-caps;
+      letter-spacing: 0.04em;
+      padding: 0.05rem 0.45rem;
+    }
+    .ryg-red { background: #f3d0cb; color: #6b241c; }
+    .ryg-yellow { background: #f6e7b8; color: #6b4e09; }
+    .ryg-green { background: #d5e8cf; color: #1f4d28; }
+    .ryg-unset { background: #e6e2da; color: #5c564c; }
+    .legend {
+      margin: 0 0 0.6rem;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
     footer {
       margin-top: 2rem;
       color: var(--muted);
@@ -95,10 +112,23 @@
       </thead>
       <tbody id="gates"></tbody>
     </table>
+    <h2>Structures gate card</h2>
+    <p class="legend">
+      Red, yellow, green, or unset. Demo uses A and B_lite (B_lite stays DEMO).
+      Hardware talk uses A, B with a mesh study, C1–C3, and E.
+      Card text is <span class="mono">cases/ducted-fan-1kn/GATES.md</span>.
+    </p>
+    <table>
+      <thead>
+        <tr><th>Gate</th><th>RYG</th><th>Note</th></tr>
+      </thead>
+      <tbody id="structures-gates"></tbody>
+    </table>
     <footer>
       Reads <span class="mono">viz/data/results.placeholder.json</span> when this page is served,
       and falls back to <span class="mono">results.placeholder.js</span> if you open the file directly.
-      Gates are described in <span class="mono">docs/ANALYSIS_GATES.md</span>.
+      Round 1 wording is <span class="mono">docs/ANALYSIS_GATES.md</span>.
+      The structures rows are <span class="mono">cases/ducted-fan-1kn/GATES.md</span>.
     </footer>
   </main>
   <script src="data/results.placeholder.js"></script>
@@ -116,7 +146,8 @@
       for (const row of data.quantities) {
         const tr = document.createElement("tr");
         const shown = row.value === null || row.value === undefined ? "—" : String(row.value);
-        tr.append(cell(row.label), cell(shown + " " + row.unit), cell(row.state));
+        const unit = row.unit ? " " + row.unit : "";
+        tr.append(cell(row.label), cell(shown + unit), cell(row.state));
         tr.lastChild.className = "state";
         quantities.append(tr);
       }
@@ -126,6 +157,20 @@
         tr.append(cell(gate.label), cell(gate.state), cell(gate.note));
         tr.children[1].className = "state";
         gates.append(tr);
+      }
+      const structures = document.getElementById("structures-gates");
+      for (const gate of data.structures_gates) {
+        const tr = document.createElement("tr");
+        const ryg = document.createElement("td");
+        const mark = document.createElement("span");
+        const color = gate.ryg === "red" || gate.ryg === "yellow" || gate.ryg === "green"
+          ? gate.ryg
+          : "unset";
+        mark.className = "ryg ryg-" + color;
+        mark.textContent = color;
+        ryg.append(mark);
+        tr.append(cell(gate.label), ryg, cell(gate.note));
+        structures.append(tr);
       }
     }
 

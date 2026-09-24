@@ -16,6 +16,13 @@ python -m http.server 8765
 
 Then open `http://127.0.0.1:8765/`.
 
-Week 3 is when a real run is allowed to write a results file. Thrust stays
-null until `docs/ANALYSIS_GATES.md` says a validation gate has passed. Do not
-hand-edit a number into the placeholder to make the page look finished.
+The page also renders the structures gate card (A, B_lite, B, C1, C2, C3, D,
+E, F) from `structures_gates` in that same file. Each row is red, yellow,
+green, or unset. Week 1 marks geometry yellow because the local STL smoke
+exists and is only a visual solid. The other rows stay unset. Green is
+unused. The words for those rows live in `cases/ducted-fan-1kn/GATES.md`.
+
+Week 3 is when a real run is allowed to write a results file. Thrust, shaft
+power, efficiency, factor of safety, and tip gap stay null until a gate that
+is allowed to produce them has passed. Do not hand-edit a number into the
+placeholder to make the page look finished.

@@ -32,3 +32,11 @@ are conditional:
 
 Inventor pass covers the workflow shape (case library, runner, dashboard),
 not a qualified fan design.
+
+The structures card for this case is
+[`cases/ducted-fan-1kn/GATES.md`](../cases/ducted-fan-1kn/GATES.md) (rows A
+through F, with B_lite kept as a DEMO). That card does not close a row in
+the table above. Week 1 still has no blade-resolved aero, no stress model,
+and no materials allowable. Gate E's file is
+[`cases/ducted-fan-1kn/materials.yaml`](../cases/ducted-fan-1kn/materials.yaml),
+a research placeholder.

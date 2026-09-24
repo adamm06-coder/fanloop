@@ -18,6 +18,7 @@ import yaml
 from pydantic import ValidationError
 
 from geom.ducted_fan import export_stl
+from geom.materials import MaterialsCard, load_materials
 from geom.mesh_stub import build_mesh
 from geom.models import load_intent
 from mesh.inspect_stl import inspect_path
@@ -25,8 +26,11 @@ from runner.cli import cmd_list, cmd_package, find_repo_root
 from runner.sbatch import MissingProject, load_job, write_sbatch
 
 REPO = Path(__file__).resolve().parents[1]
-INTENT = REPO / "cases" / "ducted-fan-1kn" / "intent.yaml"
+CASE = REPO / "cases" / "ducted-fan-1kn"
+INTENT = CASE / "intent.yaml"
+MATERIALS = CASE / "materials.yaml"
 JOB = REPO / "runner" / "jobs" / "ducted-fan-1kn.yaml"
+STRUCTURE_GATE_IDS = ("A", "B_lite", "B", "C1", "C2", "C3", "D", "E", "F")
 
 
 class SmokeTests(unittest.TestCase):
@@ -177,6 +181,30 @@ class SmokeTests(unittest.TestCase):
         self.assertIn("simpleFoam", (root / "system" / "controlDict").read_text(encoding="utf-8"))
         self.assertTrue((root / "Allrun").read_text(encoding="utf-8").startswith("#!/bin/sh"))
 
+    def test_materials_card_loads_as_placeholder(self):
+        card = load_materials(MATERIALS)
+        self.assertEqual(card.case, "ducted-fan-1kn")
+        self.assertEqual(card.gate, "E")
+        self.assertEqual(card.status, "research-placeholder")
+        self.assertEqual(card.claim, "none")
+        self.assertEqual(card.thermal, "cold")
+        self.assertTrue(all(item.allowable_status == "unset" for item in card.candidates))
+        self.assertTrue(all(item.alloy == "unset" for item in card.candidates))
+        self.assertTrue(all(ref.copied_allowable is False for ref in card.references))
+        self.assertTrue(all(ref.locator == "unset" for ref in card.references))
+
+        raw = yaml.safe_load(MATERIALS.read_text(encoding="utf-8"))
+        raw["candidates"][0]["ftu_MPa"] = 276
+        with self.assertRaises(ValidationError):
+            MaterialsCard.model_validate(raw)
+
+        readme = (CASE / "README.md").read_text(encoding="utf-8")
+        self.assertIn("[`GATES.md`](GATES.md)", readme)
+        self.assertIn("[`materials.yaml`](materials.yaml)", readme)
+        gates = (CASE / "GATES.md").read_text(encoding="utf-8")
+        for token in ("B_lite", "C1", "C2", "C3", "DEMO", "mesh study"):
+            self.assertIn(token, gates)
+
     def test_placeholder_dashboard_has_null_results_only(self):
         data = json.loads((REPO / "viz" / "data" / "results.placeholder.json").read_text())
         js = (REPO / "viz" / "data" / "results.placeholder.js").read_text()
@@ -186,9 +214,23 @@ class SmokeTests(unittest.TestCase):
         self.assertEqual(parsed_js, data)
         self.assertEqual(data["status"], "not_run")
         self.assertTrue(all(row["value"] is None for row in data["quantities"]))
+        quantity_ids = {row["id"] for row in data["quantities"]}
+        for qid in ("thrust_N", "shaft_power_W", "efficiency", "factor_of_safety", "tip_gap_m"):
+            self.assertIn(qid, quantity_ids)
+        by_gate = {gate["id"]: gate for gate in data["structures_gates"]}
+        self.assertEqual(tuple(by_gate), STRUCTURE_GATE_IDS)
+        self.assertEqual(by_gate["A"]["ryg"], "yellow")
+        for gate_id in STRUCTURE_GATE_IDS:
+            if gate_id == "A":
+                continue
+            self.assertEqual(by_gate[gate_id]["ryg"], "unset", gate_id)
+        self.assertNotIn("green", {gate["ryg"] for gate in data["structures_gates"]})
+        self.assertIn("N/A", by_gate["D"]["note"])
         html = (REPO / "viz" / "index.html").read_text(encoding="utf-8")
         self.assertIn("data/results.placeholder.json", html)
         self.assertIn("data/results.placeholder.js", html)
+        self.assertIn('id="structures-gates"', html)
+        self.assertIn("ryg-", html)
 
     def test_cli_list_and_refuses_missing_project(self):
         env = os.environ.copy()

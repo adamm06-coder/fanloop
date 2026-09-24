@@ -1,0 +1,65 @@
+schema: fanloop.materials/v0
+case: ducted-fan-1kn
+gate: E
+status: research-placeholder
+thermal: cold
+claim: none
+note: >
+  Gate E is not passed. Each candidate is a role with the alloy still unset.
+  The references are handbook names to open after a material, temper, product
+  form, and basis (A, B, or S) are chosen. No allowable is copied from MMPDS,
+  CMH-17, or any other source. This file is not an MMPDS design value.
+references:
+  - id: mmpds-index
+    kind: handbook-index
+    title: MMPDS
+    locator: unset
+    copied_allowable: false
+    note: >
+      Metallic Materials Properties Development and Standardization, cited by
+      name only. No volume, table, alloy, temper, product form, or basis.
+  - id: cmh-17-index
+    kind: handbook-index
+    title: CMH-17
+    locator: unset
+    copied_allowable: false
+    note: >
+      Composite Materials Handbook, cited by name only. A composite is not
+      selected, and no ply allowable is copied.
+candidates:
+  - id: blade
+    role: blade
+    family: unset
+    alloy: unset
+    temper: unset
+    product_form: unset
+    basis: unset
+    allowable_status: unset
+    reference_ids: [mmpds-index, cmh-17-index]
+  - id: hub
+    role: hub
+    family: unset
+    alloy: unset
+    temper: unset
+    product_form: unset
+    basis: unset
+    allowable_status: unset
+    reference_ids: [mmpds-index, cmh-17-index]
+  - id: casing
+    role: casing
+    family: unset
+    alloy: unset
+    temper: unset
+    product_form: unset
+    basis: unset
+    allowable_status: unset
+    reference_ids: [mmpds-index, cmh-17-index]
+  - id: mount
+    role: mount
+    family: unset
+    alloy: unset
+    temper: unset
+    product_form: unset
+    basis: unset
+    allowable_status: unset
+    reference_ids: [mmpds-index, cmh-17-index]
