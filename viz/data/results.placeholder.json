@@ -57,38 +57,6 @@
   ],
   "gates": [
     {
-      "id": "export_control",
-      "label": "Export control",
-      "state": "watch",
-      "note": "Cold-fan intent only. No ITAR geometry in this repo."
-    },
-    {
-      "id": "geometry_smoke",
-      "label": "Geometry smoke",
-      "state": "local",
-      "note": "STL export is a visual solid, not a CFD surface."
-    },
-    {
-      "id": "mesh",
-      "label": "Volume mesh",
-      "state": "not_started",
-      "note": "No fan mesh yet. The OpenFOAM skeleton uses blockMesh on a rectangular duct."
-    },
-    {
-      "id": "solver",
-      "label": "Solver",
-      "state": "not_run",
-      "note": "simpleFoam has not been executed."
-    },
-    {
-      "id": "validation",
-      "label": "Validation",
-      "state": "blocked",
-      "note": "No bench test and no published comparison."
-    }
-  ],
-  "structures_gates": [
-    {
       "id": "A",
       "label": "A Geometry",
       "ryg": "yellow",
@@ -98,7 +66,7 @@
       "id": "B_lite",
       "label": "B_lite Aero demo",
       "ryg": "unset",
-      "note": "DEMO only, and not run. The rectangular duct skeleton is not a propeller or actuation disk. A later force integral would still not pass Gate B."
+      "note": "DEMO only, and not run. The OpenFOAM case is a rectangular duct, not the impeller. A duct run would leave thrust unset and would not pass Gate B."
     },
     {
       "id": "B",

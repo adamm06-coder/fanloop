@@ -217,19 +217,31 @@ class SmokeTests(unittest.TestCase):
         quantity_ids = {row["id"] for row in data["quantities"]}
         for qid in ("thrust_N", "shaft_power_W", "efficiency", "factor_of_safety", "tip_gap_m"):
             self.assertIn(qid, quantity_ids)
-        by_gate = {gate["id"]: gate for gate in data["structures_gates"]}
+        self.assertNotIn("structures_gates", data)
+        by_gate = {gate["id"]: gate for gate in data["gates"]}
         self.assertEqual(tuple(by_gate), STRUCTURE_GATE_IDS)
+        retired = {"export_control", "geometry_smoke", "mesh", "solver", "validation", "fan_surface"}
+        self.assertTrue(retired.isdisjoint(by_gate))
         self.assertEqual(by_gate["A"]["ryg"], "yellow")
         for gate_id in STRUCTURE_GATE_IDS:
             if gate_id == "A":
                 continue
             self.assertEqual(by_gate[gate_id]["ryg"], "unset", gate_id)
-        self.assertNotIn("green", {gate["ryg"] for gate in data["structures_gates"]})
+        self.assertNotIn("green", {gate["ryg"] for gate in data["gates"]})
+        self.assertIn("DEMO", by_gate["B_lite"]["note"])
         self.assertIn("N/A", by_gate["D"]["note"])
+        analysis = (REPO / "docs" / "ANALYSIS_GATES.md").read_text(encoding="utf-8")
+        self.assertIn("cases/ducted-fan-1kn/GATES.md", analysis)
+        self.assertNotIn("Scope freeze", analysis)
+        self.assertNotIn("Fan surface", analysis)
+        card = (CASE / "GATES.md").read_text(encoding="utf-8")
+        self.assertIn("rectangular cold duct", card)
+        self.assertIn("not the impeller", card)
         html = (REPO / "viz" / "index.html").read_text(encoding="utf-8")
         self.assertIn("data/results.placeholder.json", html)
         self.assertIn("data/results.placeholder.js", html)
-        self.assertIn('id="structures-gates"', html)
+        self.assertIn('id="gates"', html)
+        self.assertNotIn("structures-gates", html)
         self.assertIn("ryg-", html)
 
     def test_cli_list_and_refuses_missing_project(self):

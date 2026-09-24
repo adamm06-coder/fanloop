@@ -106,29 +106,21 @@
       <tbody id="quantities"></tbody>
     </table>
     <h2>Gates</h2>
-    <table>
-      <thead>
-        <tr><th>Gate</th><th>State</th><th>Note</th></tr>
-      </thead>
-      <tbody id="gates"></tbody>
-    </table>
-    <h2>Structures gate card</h2>
     <p class="legend">
       Red, yellow, green, or unset. Demo uses A and B_lite (B_lite stays DEMO).
       Hardware talk uses A, B with a mesh study, C1–C3, and E.
-      Card text is <span class="mono">cases/ducted-fan-1kn/GATES.md</span>.
+      The list is <span class="mono">cases/ducted-fan-1kn/GATES.md</span>.
     </p>
     <table>
       <thead>
         <tr><th>Gate</th><th>RYG</th><th>Note</th></tr>
       </thead>
-      <tbody id="structures-gates"></tbody>
+      <tbody id="gates"></tbody>
     </table>
     <footer>
       Reads <span class="mono">viz/data/results.placeholder.json</span> when this page is served,
       and falls back to <span class="mono">results.placeholder.js</span> if you open the file directly.
-      Round 1 wording is <span class="mono">docs/ANALYSIS_GATES.md</span>.
-      The structures rows are <span class="mono">cases/ducted-fan-1kn/GATES.md</span>.
+      Gate ids match <span class="mono">cases/ducted-fan-1kn/GATES.md</span>.
     </footer>
   </main>
   <script src="data/results.placeholder.js"></script>
@@ -154,13 +146,6 @@
       const gates = document.getElementById("gates");
       for (const gate of data.gates) {
         const tr = document.createElement("tr");
-        tr.append(cell(gate.label), cell(gate.state), cell(gate.note));
-        tr.children[1].className = "state";
-        gates.append(tr);
-      }
-      const structures = document.getElementById("structures-gates");
-      for (const gate of data.structures_gates) {
-        const tr = document.createElement("tr");
         const ryg = document.createElement("td");
         const mark = document.createElement("span");
         const color = gate.ryg === "red" || gate.ryg === "yellow" || gate.ryg === "green"
@@ -170,7 +155,7 @@
         mark.textContent = color;
         ryg.append(mark);
         tr.append(cell(gate.label), ryg, cell(gate.note));
-        structures.append(tr);
+        gates.append(tr);
       }
     }
 

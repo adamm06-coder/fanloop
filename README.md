@@ -26,8 +26,8 @@ impeller. The runner writes a Slurm script and does not submit it.
 | --- | --- | --- |
 | 1 | Local smoke | The commands below produce an STL, a tarball, a refused-or-rendered sbatch, and a dashboard of nulls. |
 | 2 | One OSC case | A real project code, `module load openfoam/2606`, and `simpleFoam` on the cold duct. Thrust in the dashboard stays null. |
-| 3 | Sweep and dashboard | A declared parameter sweep writes a results JSON the page reads. Thrust stays null until a validation gate passes. |
-| 4 | Vertical polish | The impeller-plus-stator geometry and the chosen mesher are written down against [`docs/ANALYSIS_GATES.md`](docs/ANALYSIS_GATES.md). Still no Part 33 claim and no quoted thrust. |
+| 3 | Sweep and dashboard | A declared parameter sweep writes a results JSON the page reads. Thrust stays null until Gate B on the case card allows a quoted result. |
+| 4 | Vertical polish | The impeller-plus-stator geometry and the chosen mesher are written down against [`cases/ducted-fan-1kn/GATES.md`](cases/ducted-fan-1kn/GATES.md). Still no Part 33 claim and no quoted thrust. |
 
 ## Layout
 
@@ -123,7 +123,7 @@ model, not for producing the case that goes to OSC.
 Ansys wrappers. A clone of a commercial fan-design product. Hot combustor
 CFD. Part 33 certification work. ITAR geometry. Secrets or OSC project codes
 in git. A thrust number that did not pass the gates in
-[`docs/ANALYSIS_GATES.md`](docs/ANALYSIS_GATES.md).
+[`cases/ducted-fan-1kn/GATES.md`](cases/ducted-fan-1kn/GATES.md).
 
 NASA-released tools such as OpenVSP are a possible later geometry check.
 They are not the Week-1 spine. FanLoop is not a NASA project, not an OSC

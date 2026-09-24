@@ -44,9 +44,10 @@ Geometry notes that stay in force:
 | Inventor | Pass |
 | Strategist | Validate first |
 
-Conditional pass means the vertical may proceed only while the gates in
-`ANALYSIS_GATES.md` stay honest. Validate first means a number is not a
-result until a gate says so.
+Conditional pass means the vertical may proceed only while the rows in
+`cases/ducted-fan-1kn/GATES.md` stay honest. `docs/ANALYSIS_GATES.md` points
+at that card. Validate first means a number is not a result until a gate
+says so.
 
 ## Out of year 1
 
